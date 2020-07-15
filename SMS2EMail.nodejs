@@ -2,12 +2,13 @@ exports.handler = function(event, context, callback) {
     var AWS = require('aws-sdk');
     AWS.config.region = 'us-west-2';
     var SES = new AWS.SES();
-
+// JSON parsing below updated to Flowroute's latest SMS API version: 2.1 - for more details see issue #1
+// Thanks @chriselsen for the updated parsing code
     var obj = JSON.parse(event.body);
-    var to = (obj.to === undefined ? 'Undefined (to)' : obj.to);
-    var body = (obj.body === undefined ? 'Undefined (body)' : obj.body);
-    var from = (obj.from === undefined ? 'Undefined (from)' : obj.from);
-    var id = (obj.id === undefined ? 'Undefined (id)' : obj.id);
+    var to = (obj.data.attributes.to === undefined ? 'Undefined (to)' : obj.data.attributes.to);
+    var body = (obj.data.attributes.body === undefined ? 'Undefined (body)' : obj.data.attributes.body);
+    var from = (obj.data.attributes.from === undefined ? 'Undefined (from)' : obj.data.attributes.from);
+    var id = (obj.data.id === undefined ? 'Undefined (id)' : obj.data.id);
   
     var emailParams = {
         Destination: {
